@@ -59,6 +59,17 @@ public class ProductService {
         return productPage.map(this::mapToResponse);
     }
 
+    public Page<ProductResponse> advancedSearchProducts(String keyword, Long categoryId, 
+                                                       BigDecimal minPrice, BigDecimal maxPrice, 
+                                                       Boolean inStock, Pageable pageable) {
+        log.debug("Advanced search - keyword: {}, categoryId: {}, minPrice: {}, maxPrice: {}, inStock: {}", 
+                keyword, categoryId, minPrice, maxPrice, inStock);
+        
+        Page<Product> productPage = productRepository.findWithFilters(
+                keyword, categoryId, minPrice, maxPrice, inStock, pageable);
+        return productPage.map(this::mapToResponse);
+    }
+
     public Page<ProductResponse> getProductsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice, Pageable pageable) {
         log.debug("Fetching products by price range: {} - {} with pagination: {}", minPrice, maxPrice, pageable);
         Page<Product> productPage = productRepository.findByPriceBetween(minPrice, maxPrice, pageable);

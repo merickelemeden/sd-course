@@ -97,6 +97,45 @@ public class ProductController {
         return ResponseEntity.ok(productPage.getContent());
     }
 
+    @Operation(summary = "Advanced product search", description = "Search products with multiple filters")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Search completed successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid search parameters"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping("/search/advanced")
+    public ResponseEntity<Page<ProductResponse>> advancedSearchProducts(
+            @Parameter(description = "Search keyword for name/description")
+            @RequestParam(required = false) String keyword,
+            @Parameter(description = "Category ID filter")
+            @RequestParam(required = false) Long categoryId,
+            @Parameter(description = "Minimum price filter")
+            @RequestParam(required = false) BigDecimal minPrice,
+            @Parameter(description = "Maximum price filter")
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @Parameter(description = "In stock filter (true/false)")
+            @RequestParam(required = false) Boolean inStock,
+            @Parameter(description = "Page number (0-based)")
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @Parameter(description = "Page size")
+            @RequestParam(required = false, defaultValue = "20") int size,
+            @Parameter(description = "Sort by field")
+            @RequestParam(required = false, defaultValue = "name") String sortBy,
+            @Parameter(description = "Sort direction")
+            @RequestParam(required = false, defaultValue = "asc") String sortDir) {
+        
+        log.info("GET /api/products/search/advanced - keyword: {}, categoryId: {}, minPrice: {}, maxPrice: {}, inStock: {}", 
+                keyword, categoryId, minPrice, maxPrice, inStock);
+        
+        Sort sort = Sort.by(sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        
+        Page<ProductResponse> productPage = productService.advancedSearchProducts(
+                keyword, categoryId, minPrice, maxPrice, inStock, pageable);
+        
+        return ResponseEntity.ok(productPage);
+    }
+
     @Operation(summary = "Get products by price range", description = "Retrieve products within a price range")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Products retrieved successfully"),

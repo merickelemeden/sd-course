@@ -102,4 +102,20 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * Find products with stock quantity greater than specified value
      */
     Page<Product> findByStockQuantityGreaterThan(Integer stockQuantity, Pageable pageable);
+
+    /**
+     * Advanced search with multiple filters
+     */
+    @Query("SELECT p FROM Product p WHERE " +
+           "(:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND " +
+           "(:categoryId IS NULL OR p.category.id = :categoryId) AND " +
+           "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
+           "(:maxPrice IS NULL OR p.price <= :maxPrice) AND " +
+           "(:inStock IS NULL OR (:inStock = true AND p.stockQuantity > 0) OR (:inStock = false AND p.stockQuantity = 0))")
+    Page<Product> findWithFilters(@Param("keyword") String keyword,
+                                  @Param("categoryId") Long categoryId,
+                                  @Param("minPrice") BigDecimal minPrice,
+                                  @Param("maxPrice") BigDecimal maxPrice,
+                                  @Param("inStock") Boolean inStock,
+                                  Pageable pageable);
 } 

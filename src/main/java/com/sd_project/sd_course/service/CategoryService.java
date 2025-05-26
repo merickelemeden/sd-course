@@ -10,6 +10,8 @@ import com.sd_project.sd_course.mapper.CategoryMapper;
 import com.sd_project.sd_course.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
+    @Cacheable("categories")
     public List<CategoryResponse> getAllCategories() {
         log.debug("Fetching all categories");
         List<Category> categories = categoryRepository.findAllByOrderByNameAsc();
