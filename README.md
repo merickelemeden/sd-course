@@ -275,11 +275,6 @@ JWT_EXPIRATION=86400000
 SERVER_PORT=8080
 ```
 
-### Health Checks
-The application provides health endpoints for monitoring:
-- `/actuator/health` - Overall application health
-- `/actuator/info` - Application build information
-
 ## 🎯 Key Improvements Made
 
 1. **Enhanced Security**: All endpoints now require authentication
@@ -290,22 +285,6 @@ The application provides health endpoints for monitoring:
 6. **Better Documentation**: Comprehensive API documentation with examples
 7. **Role Management**: Dynamic role assignment and management
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📞 Contact
-
-For questions or support, please open an issue in the GitHub repository.
-
----
-
-**Happy Shopping! 🛍️** 
